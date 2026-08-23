@@ -1,6 +1,0 @@
-#!/bin/bash
-
-echo "Killing runningboardd..."
-killall -9 runningboardd || true
-
-exit 0

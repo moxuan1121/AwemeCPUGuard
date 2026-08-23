@@ -3,6 +3,8 @@ from pathlib import Path
 root = Path(__file__).resolve().parents[1]
 core = (root / "GlobalCPUGuard.xm").read_text(encoding="utf-8")
 common = (root / "Common.h").read_text(encoding="utf-8")
+makefile = (root / "Makefile").read_text(encoding="utf-8")
+control = (root / "control").read_text(encoding="utf-8")
 config = (root / "vedetteprefs/VDTProcessConfiguration.m").read_text(encoding="utf-8")
 app_list = (root / "vedetteprefs/VDTApplicationListSubcontrollerController.m").read_text(encoding="utf-8")
 daemon_list = (root / "vedetteprefs/ChoicyPreferences/CHPDaemonListController.m").read_text(encoding="utf-8")
@@ -49,5 +51,13 @@ for obsolete_name in ["Vedette.png", "PayPal.png", "Reddit.png", "Twitter.png"]:
     assert not (root / "vedetteprefs/Resources" / obsolete_name).exists(), f"obsolete resource remains: {obsolete_name}"
 assert "sqlite" not in core.lower()
 assert "HBLog" not in core
+assert "GlobalCPUGuard_INSTALL_PATH = /usr/lib/TweakInject" in makefile
+assert not (root / "layout/DEBIAN/postrm").exists()
+postinst = (root / "layout/DEBIAN/postinst").read_text(encoding="utf-8")
+assert 'if [ "$1" = "configure" ]' in postinst
+assert "ln -s /usr/lib/TweakInject /Library/MobileSubstrate/DynamicLibraries" in postinst
+assert "ln -sf" not in postinst and "rm " not in postinst and "killall" not in postinst
+assert "Conflicts: com.moxuan.awemecpuguard, com.udevs.vedette" in control
+assert "Replaces: com.moxuan.awemecpuguard, com.udevs.vedette" in control
 
 print("GlobalCPUGuard structural invariants: OK")

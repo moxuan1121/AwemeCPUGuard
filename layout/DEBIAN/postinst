@@ -1,6 +1,16 @@
 #!/bin/bash
 
-echo "Killing runningboardd..."
-killall -9 runningboardd || true
+# Releases through 1.0.4 installed a directory entry over ElleKit's
+# MobileSubstrate compatibility symlink. An upgrade from those releases can
+# make dpkg remove the symlink while retiring the old file list. Restore only
+# an absent compatibility entry; never replace an existing object or touch the
+# TweakInject target itself.
+if [ "$1" = "configure" ] && \
+   [ -d /usr/lib/TweakInject ] && \
+   [ -d /Library/MobileSubstrate ] && \
+   [ ! -e /Library/MobileSubstrate/DynamicLibraries ] && \
+   [ ! -L /Library/MobileSubstrate/DynamicLibraries ]; then
+    ln -s /usr/lib/TweakInject /Library/MobileSubstrate/DynamicLibraries || true
+fi
 
 exit 0

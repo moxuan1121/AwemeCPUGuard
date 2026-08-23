@@ -63,7 +63,10 @@ jobs:
           test -n "$deb" && test -s "$deb"
           test "$(dpkg-deb -f "$deb" Package)" = "com.moxuan.globalcpuguard"
           test "$(dpkg-deb -f "$deb" Architecture)" = "iphoneos-arm64e"
-          dpkg-deb -c "$deb" | grep -q 'GlobalCPUGuard.dylib'
+          dpkg-deb -c "$deb" | grep -q './usr/lib/TweakInject/GlobalCPUGuard.dylib'
+          dpkg-deb -c "$deb" | grep -q './usr/lib/TweakInject/GlobalCPUGuard.plist'
+          ! dpkg-deb -c "$deb" | grep -q './Library/MobileSubstrate/'
+          ! dpkg-deb -c "$deb" | grep -Eq './(usr/lib/lib(substrate|ellekit)\.dylib|usr/lib/ellekit/|usr/libexec/ellekit/|Library/Frameworks/CydiaSubstrate\.framework/)'
           dpkg-deb -c "$deb" | grep -q 'GlobalCPUGuardPrefs.bundle/GlobalCPUGuardPrefs'
           dpkg-deb -c "$deb" | grep -q 'GlobalCPUGuardPrefs.bundle/GlobalCPUGuard.png'
           dpkg-deb -c "$deb" | grep -q 'GlobalCPUGuardPrefs.bundle/GlobalCPUGuard@2x.png'

@@ -14,6 +14,7 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = GlobalCPUGuard
 GlobalCPUGuard_FILES = GlobalCPUGuard.xm VDTShared.mm
+GlobalCPUGuard_INSTALL_PATH = /usr/lib/TweakInject
 GlobalCPUGuard_CFLAGS = -fobjc-arc -I$(THEOS_PROJECT_DIR)
 GlobalCPUGuard_FRAMEWORKS = UIKit
 
